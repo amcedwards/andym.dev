@@ -26,7 +26,7 @@ author:  # change following line to your infomation.
   skill_icon2:
     - name: fa-linux
     - name: icon-apache
-  desc: "Right in the middle: people, process, and cloud technology".  # Describe yourself.
+  desc: "Right in the middle; people, process, and cloud technology."  # Describe yourself.
 
 # comment
 # disqus:  # if you wanna comment feature, go to https://disqus.com/ to get your configuration; if not, comment following two lines.
