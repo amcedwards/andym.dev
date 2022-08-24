@@ -42,8 +42,8 @@ go:
   # id:
 
 ## growingIO
-gio:# if you wanna this feature, go to https://www.growingio.com/ to get your configuration; if not, comment following line.
-  # id:
+# gio:  # if you wanna this feature, go to https://www.growingio.com/ to get your configuration; if not, comment following line.
+# id:
 
 ## donation
 donation: off # type 'on'/'off' to choice display donation button at post page or not
