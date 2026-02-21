@@ -1,0 +1,9 @@
+# Jekyll configuration for GitHub Pages
+# This prevents CLAUDE.md from being published to the live site
+
+exclude:
+  - CLAUDE.md
+  - README.md
+  - .gitignore
+  - .git/
+  - .github/
