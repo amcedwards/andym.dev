@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is Andrew McEdwards' professional portfolio and homepage - a modern, single-page Progressive Web App (PWA) showcasing experience, certifications, and expertise in Cloud & DevOps Engineering.
+This is Andrew McEdwards' professional portfolio and homepage - a modern, single-page application showcasing experience, certifications, and expertise in Cloud & DevOps Engineering.
 
 **Live Site:** https://andym.dev
 
@@ -13,7 +13,6 @@ This is Andrew McEdwards' professional portfolio and homepage - a modern, single
 - **Styling:** Tailwind CSS (via CDN)
 - **Icons:** Font Awesome 6.4.0
 - **Fonts:** Google Fonts (Inter)
-- **PWA:** Service Worker (`sw.js`) + Web App Manifest (`manifest.json`)
 
 ## Architecture
 
@@ -119,13 +118,8 @@ gh run watch --exit-status <run-id>
 ```
 /Users/andrew/code/ui/
 ├── index.html          # Main application file (HTML + CSS + JS)
-├── manifest.json       # PWA manifest
-├── sw.js              # Service worker for offline support
 ├── CNAME              # Custom domain configuration
 ├── _config.yml        # Jekyll config (excludes CLAUDE.md from site)
-├── icons/             # PWA icons
-│   ├── icon-192x192.svg
-│   └── icon-512x512.svg
 ├── company-icons.js   # Company logo SVG data (if used)
 ├── company-logos.svg  # Company logos (if used)
 ├── .gitignore         # Git ignore file (.claude/settings.local.json)
@@ -211,15 +205,15 @@ gh run watch --exit-status <run-id>
 
 - **No Build Step:** Changes deploy instantly without compilation
 - **CDN Dependencies:** React, Tailwind, Font Awesome loaded from CDN
-- **Service Worker:** Caches assets for offline functionality
 - **Lazy Loading:** Icons and images load on-demand
 - **Intersection Observer:** Efficient scroll-based animations
+- **Lightweight:** No service worker overhead or caching complexity
 
 ## Browser Support
 
 - **Modern Browsers:** Chrome, Firefox, Safari, Edge (latest 2 versions)
 - **Mobile:** iOS Safari, Chrome Android
-- **PWA Features:** Supported on Chrome, Edge, Safari 11.1+
+- **Standards:** ES6+, CSS Grid, Flexbox, Intersection Observer API
 
 ## Troubleshooting
 
