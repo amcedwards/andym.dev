@@ -61,11 +61,76 @@
             animation: pulse-slow 4s ease-in-out infinite;
         }
 
-        /* Glass effect */
+        /* Enhanced Glass effect */
         .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Animated gradient text */
+        @keyframes gradientText {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .gradient-text-animated {
+            background: linear-gradient(-45deg, #10b981, #059669, #0d9488, #14b8a6, #10b981);
+            background-size: 300% 300%;
+            animation: gradientText 3s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 3D Card tilt effect */
+        .card-tilt {
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .card-tilt:hover {
+            transform: perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale3d(1.02, 1.02, 1.02);
+        }
+
+        /* Scroll reveal animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Parallax layers */
+        .parallax-slow {
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         /* Smooth fade in */
@@ -118,18 +183,125 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useRef } = React;
 
-        // Animated Background Component
-        const AnimatedBackground = () => (
+        // Count-up Animation Hook
+        const useCountUp = (end, duration = 2000, shouldStart = false) => {
+            const [count, setCount] = useState(0);
+
+            useEffect(() => {
+                if (!shouldStart) return;
+
+                let startTime;
+                let animationFrame;
+
+                const animate = (currentTime) => {
+                    if (!startTime) startTime = currentTime;
+                    const progress = (currentTime - startTime) / duration;
+
+                    if (progress < 1) {
+                        setCount(Math.floor(end * progress));
+                        animationFrame = requestAnimationFrame(animate);
+                    } else {
+                        setCount(end);
+                    }
+                };
+
+                animationFrame = requestAnimationFrame(animate);
+                return () => cancelAnimationFrame(animationFrame);
+            }, [end, duration, shouldStart]);
+
+            return count;
+        };
+
+        // Scroll Reveal Hook
+        const useScrollReveal = () => {
+            useEffect(() => {
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('active');
+                            }
+                        });
+                    },
+                    { threshold: 0.1 }
+                );
+
+                const elements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+                elements.forEach((el) => observer.observe(el));
+
+                return () => observer.disconnect();
+            }, []);
+        };
+
+        // Card Tilt Effect Hook
+        const useCardTilt = (ref) => {
+            useEffect(() => {
+                const card = ref.current;
+                if (!card) return;
+
+                const handleMouseMove = (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateX = ((y - centerY) / centerY) * -10;
+                    const rotateY = ((x - centerX) / centerX) * 10;
+
+                    card.style.setProperty('--rotate-x', `${rotateX}deg`);
+                    card.style.setProperty('--rotate-y', `${rotateY}deg`);
+                };
+
+                const handleMouseLeave = () => {
+                    card.style.setProperty('--rotate-x', '0deg');
+                    card.style.setProperty('--rotate-y', '0deg');
+                };
+
+                card.addEventListener('mousemove', handleMouseMove);
+                card.addEventListener('mouseleave', handleMouseLeave);
+
+                return () => {
+                    card.removeEventListener('mousemove', handleMouseMove);
+                    card.removeEventListener('mouseleave', handleMouseLeave);
+                };
+            }, [ref]);
+        };
+
+        // Parallax Effect Hook
+        const useParallax = () => {
+            useEffect(() => {
+                const handleScroll = () => {
+                    const scrolled = window.pageYOffset;
+                    const parallaxElements = document.querySelectorAll('.parallax-slow');
+
+                    parallaxElements.forEach((el, index) => {
+                        const speed = (index + 1) * 0.3;
+                        el.style.transform = `translateY(${scrolled * speed}px)`;
+                    });
+                };
+
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+        };
+
+        // Animated Background Component with Parallax
+        const AnimatedBackground = () => {
+            useParallax();
+
+            return (
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
                 {/* Main animated gradient */}
                 <div className="animated-gradient absolute inset-0"></div>
 
-                {/* Abstract shapes with opacity */}
-                <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500 rounded-full blur-3xl opacity-10 float-slow"></div>
-                <div className="absolute bottom-0 left-0 w-80 h-80 bg-cyan-500 rounded-full blur-3xl opacity-10 float-slower"></div>
-                <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-indigo-500 rounded-full blur-3xl opacity-5 animate-pulse"></div>
+                {/* Abstract shapes with opacity and parallax */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500 rounded-full blur-3xl opacity-10 float-slow parallax-slow"></div>
+                <div className="absolute bottom-0 left-0 w-80 h-80 bg-cyan-500 rounded-full blur-3xl opacity-10 float-slower parallax-slow"></div>
+                <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-indigo-500 rounded-full blur-3xl opacity-5 animate-pulse parallax-slow"></div>
 
                 {/* Grid pattern overlay */}
                 <div className="absolute inset-0 opacity-5" style={{
@@ -137,10 +309,36 @@
                 }}>
                 </div>
             </div>
-        );
+            );
+        };
 
         // Hero Section
-        const Hero = () => (
+        const Hero = () => {
+            const [statsVisible, setStatsVisible] = useState(false);
+            const statsRef = useRef(null);
+
+            const connections = useCountUp(500, 2000, statsVisible);
+            const followers = useCountUp(1600, 2000, statsVisible);
+            const years = useCountUp(25, 2000, statsVisible);
+
+            useEffect(() => {
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        if (entries[0].isIntersecting) {
+                            setStatsVisible(true);
+                        }
+                    },
+                    { threshold: 0.5 }
+                );
+
+                if (statsRef.current) {
+                    observer.observe(statsRef.current);
+                }
+
+                return () => observer.disconnect();
+            }, []);
+
+            return (
             <section className="relative min-h-screen flex items-center justify-center px-4 pt-20">
                 <div className="max-w-4xl w-full">
                     {/* Avatar */}
@@ -167,17 +365,17 @@
                     </div>
 
                     {/* Quick Stats */}
-                    <div className="grid grid-cols-3 gap-4 mb-8 fade-in fade-in-delay-2">
-                        <div className="glass rounded-lg p-4 text-center hover-lift transition-smooth">
-                            <div className="text-2xl font-bold text-emerald-600">500+</div>
+                    <div ref={statsRef} className="grid grid-cols-3 gap-4 mb-8 fade-in fade-in-delay-2">
+                        <div className="glass rounded-lg p-4 text-center hover-lift transition-smooth card-tilt">
+                            <div className="text-2xl font-bold text-emerald-600">{connections}+</div>
                             <div className="text-sm text-gray-400">Connections</div>
                         </div>
-                        <div className="glass rounded-lg p-4 text-center hover-lift transition-smooth">
-                            <div className="text-2xl font-bold text-emerald-600">1600+</div>
+                        <div className="glass rounded-lg p-4 text-center hover-lift transition-smooth card-tilt">
+                            <div className="text-2xl font-bold text-emerald-600">{followers}+</div>
                             <div className="text-sm text-gray-400">Followers</div>
                         </div>
-                        <div className="glass rounded-lg p-4 text-center hover-lift transition-smooth">
-                            <div className="text-2xl font-bold text-emerald-600">25+</div>
+                        <div className="glass rounded-lg p-4 text-center hover-lift transition-smooth card-tilt">
+                            <div className="text-2xl font-bold text-emerald-600">{years}+</div>
                             <div className="text-sm text-gray-400">Years Exp.</div>
                         </div>
                     </div>
@@ -208,7 +406,8 @@
                     </div>
                 </div>
             </section>
-        );
+            );
+        };
 
         // Icon components for certifications
         const CertIcons = {
@@ -246,7 +445,7 @@
             return (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {certs.map((cert, idx) => (
-                        <div key={idx} className="glass rounded-lg p-4 hover-lift transition-smooth fade-in" style={{ animationDelay: `${0.1 + idx * 0.1}s` }}>
+                        <div key={idx} className={`glass rounded-lg p-4 hover-lift transition-smooth card-tilt ${idx % 2 === 0 ? 'reveal-left' : 'reveal-right'}`}>
                             <div className="text-2xl mb-3 text-emerald-600">
                                 <i className={cert.icon}></i>
                             </div>
@@ -445,7 +644,7 @@
             ];
 
             const ExperienceCard = ({ exp, delay }) => (
-                <div className="glass rounded-lg p-6 hover-lift transition-smooth fade-in" style={{ animationDelay: `${delay}s` }}>
+                <div className="glass rounded-lg p-6 hover-lift transition-smooth reveal card-tilt" style={{ animationDelay: `${delay}s` }}>
                     <div className="flex items-start gap-4">
                         <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-2xl text-emerald-600">
                             <i className={exp.icon}></i>
@@ -505,7 +704,7 @@
             return (
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
                     {/* Large card: Strategy (PROMOTED) */}
-                    <div className="md:col-span-2 md:row-span-2 glass rounded-lg p-6 hover-lift transition-smooth fade-in bg-emerald-950/30 border border-emerald-600/30" style={{ animationDelay: '0.1s' }}>
+                    <div className="md:col-span-2 md:row-span-2 glass rounded-lg p-6 hover-lift transition-smooth reveal card-tilt bg-emerald-950/30 border border-emerald-600/30">
                         <div className="flex items-start justify-between h-full">
                             <div>
                                 <div className="w-12 h-12 mb-4 text-emerald-600">
@@ -519,7 +718,7 @@
                     </div>
 
                     {/* Large card: Cloud Platforms */}
-                    <div className="md:col-span-2 md:row-span-2 glass rounded-lg p-6 hover-lift transition-smooth fade-in" style={{ animationDelay: '0.15s' }}>
+                    <div className="md:col-span-2 md:row-span-2 glass rounded-lg p-6 hover-lift transition-smooth reveal card-tilt">
                         <div className="flex items-start justify-between h-full">
                             <div>
                                 <div className="w-12 h-12 mb-4 text-emerald-600">
@@ -537,7 +736,7 @@
                     </div>
 
                     {/* Medium card: Leadership */}
-                    <div className="md:col-span-2 glass rounded-lg p-6 hover-lift transition-smooth fade-in" style={{ animationDelay: '0.2s' }}>
+                    <div className="md:col-span-2 glass rounded-lg p-6 hover-lift transition-smooth reveal card-tilt">
                         <div className="w-10 h-10 mb-3 text-emerald-600">
                             <i className="fas fa-handshake text-xl"></i>
                         </div>
@@ -546,7 +745,7 @@
                     </div>
 
                     {/* Medium card: Scale */}
-                    <div className="md:col-span-2 glass rounded-lg p-6 hover-lift transition-smooth fade-in" style={{ animationDelay: '0.25s' }}>
+                    <div className="md:col-span-2 glass rounded-lg p-6 hover-lift transition-smooth reveal card-tilt">
                         <div className="flex items-center justify-between">
                             <div>
                                 <div className="w-10 h-10 mb-3 text-emerald-600">
@@ -563,7 +762,7 @@
                     </div>
 
                     {/* Small card: FinOps */}
-                    <div className="md:col-span-1 glass rounded-lg p-4 hover-lift transition-smooth fade-in" style={{ animationDelay: '0.3s' }}>
+                    <div className="md:col-span-1 glass rounded-lg p-4 hover-lift transition-smooth reveal card-tilt">
                         <div className="w-8 h-8 mb-2 text-emerald-600">
                             <i className="fas fa-dollar-sign text-lg"></i>
                         </div>
@@ -572,7 +771,7 @@
                     </div>
 
                     {/* Small card: CI/CD */}
-                    <div className="md:col-span-1 glass rounded-lg p-4 hover-lift transition-smooth fade-in" style={{ animationDelay: '0.35s' }}>
+                    <div className="md:col-span-1 glass rounded-lg p-4 hover-lift transition-smooth reveal card-tilt">
                         <div className="w-8 h-8 mb-2 text-emerald-600">
                             <i className="fas fa-cogs text-lg"></i>
                         </div>
@@ -581,7 +780,7 @@
                     </div>
 
                     {/* Small card: Observability */}
-                    <div className="md:col-span-1 glass rounded-lg p-4 hover-lift transition-smooth fade-in" style={{ animationDelay: '0.4s' }}>
+                    <div className="md:col-span-1 glass rounded-lg p-4 hover-lift transition-smooth reveal card-tilt">
                         <div className="w-8 h-8 mb-2 text-emerald-600">
                             <i className="fas fa-chart-bar text-lg"></i>
                         </div>
@@ -590,7 +789,7 @@
                     </div>
 
                     {/* Small card: Multi-Cloud */}
-                    <div className="md:col-span-1 glass rounded-lg p-4 hover-lift transition-smooth fade-in" style={{ animationDelay: '0.45s' }}>
+                    <div className="md:col-span-1 glass rounded-lg p-4 hover-lift transition-smooth reveal card-tilt">
                         <div className="w-8 h-8 mb-2 text-emerald-600">
                             <i className="fas fa-network-wired text-lg"></i>
                         </div>
@@ -657,7 +856,7 @@
             return (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {skillGroups.map((group, idx) => (
-                        <div key={idx} className="glass rounded-lg p-6 hover-lift transition-smooth fade-in" style={{ animationDelay: `${0.1 + idx * 0.15}s` }}>
+                        <div key={idx} className="glass rounded-lg p-6 hover-lift transition-smooth reveal card-tilt" style={{ animationDelay: `${0.1 + idx * 0.15}s` }}>
                             <div className="mb-3">{<group.icon />}</div>
                             <h3 className={`text-lg font-700 mb-4 bg-gradient-to-r ${group.gradient} bg-clip-text text-transparent`}>
                                 {group.category}
@@ -678,6 +877,9 @@
 // Main App Component
         const App = () => {
             const [activeSection, setActiveSection] = useState('hero');
+
+            // Enable scroll reveal animations
+            useScrollReveal();
 
             return (
                 <div className="relative min-h-screen" style={{ backgroundColor: '#0F1419' }}>
