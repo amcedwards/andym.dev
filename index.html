@@ -228,10 +228,36 @@
                     { threshold: 0.1 }
                 );
 
-                const elements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
-                elements.forEach((el) => observer.observe(el));
+                // Track which elements we're already observing
+                const observedElements = new Set();
 
-                return () => observer.disconnect();
+                const observeElements = () => {
+                    const elements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+                    elements.forEach((el) => {
+                        if (!observedElements.has(el)) {
+                            observer.observe(el);
+                            observedElements.add(el);
+                        }
+                    });
+                };
+
+                // Initial observation
+                observeElements();
+
+                // Watch for DOM changes and observe new elements
+                const mutationObserver = new MutationObserver(() => {
+                    observeElements();
+                });
+
+                mutationObserver.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+
+                return () => {
+                    observer.disconnect();
+                    mutationObserver.disconnect();
+                };
             }, []);
         };
 
@@ -606,7 +632,7 @@
                     location: 'Toronto, ON',
                     dates: 'Nov 2009 - Aug 2013',
                     icon: 'fas fa-file-invoice-dollar',
-                    description: 'Built the foundation that made big things possible. Enterprise systems at scale, before "scale" became a personality trait.',
+                    description: 'Built rock-solid datacenter and infrastructure foundations for scale and stability.',
                 },
                 {
                     title: 'Lab Administrator',
@@ -614,36 +640,58 @@
                     location: 'Canada',
                     dates: 'Jul 2008 - Nov 2009',
                     icon: 'fas fa-server',
-                    description: 'Virtualization before it was cool. Kept the lab humming while everyone figured out what virtual machines were for.',
+                    description: 'Managed the lab hardware for a virtualization company. $4MM/year budget for the latest gear. Nerd heaven.',
                 },
                 {
                     title: 'Infra/Ops Team Lead',
                     company: 'RealTime Edge Software Corp.',
                     location: 'Canada',
                     dates: 'Jan 2006 - Jul 2007',
-                    icon: 'fas fa-people-group',
-                    description: 'Led a lean ops team through infrastructure adventures, back when "DevOps" wasn\'t a thing yet.',
+                    icon: 'fas fa-gamepad',
+                    description: 'Led a small ops team through big adventures in online gaming.',
                 },
                 {
                     title: 'Senior Unix Administrator',
                     company: 'MDS Proteomics Inc.',
                     location: 'Canada',
                     dates: 'Jan 2004 - Dec 2005',
-                    icon: 'fas fa-terminal',
-                    description: 'Deep Unix systems expertise. This is where I learned that having good ops fundamentals makes everything else easier.',
+                    icon: 'fas fa-user-doctor',
+                    description: 'Small team for a high performance computing shop doing drug discovery. Lots of servers, lots of fibre, lots of fun.',
                 },
                 {
                     title: 'IT Specialist',
                     company: 'IBM Canada Ltd.',
                     location: 'Canada',
                     dates: 'Sep 2001 - Jul 2003',
-                    icon: 'fab fa-ibm',
+                    icon: 'fas fa-user-tie',
                     description: 'Started the journey at Big Blue. First real job, first big systems, first lessons in enterprise IT.',
                 },
             ];
 
             const ExperienceCard = ({ exp, delay }) => (
-                <div className="glass rounded-lg p-6 hover-lift transition-smooth reveal card-tilt" style={{ animationDelay: `${delay}s` }}>
+                <div className="glass rounded-lg p-6 hover-lift reveal card-tilt" style={{ animationDelay: `${delay}s`, transition: 'transform 0.3s ease, opacity 0.8s ease-out' }}>
+                    <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-2xl text-emerald-600">
+                            <i className={exp.icon}></i>
+                        </div>
+                        <div className="flex-1">
+                            <div className="flex items-baseline gap-2 mb-1">
+                                <h3 className="text-xl font-700 text-white">{exp.title}</h3>
+                                {exp.current && <span className="text-xs bg-emerald-700 text-white px-2 py-1 rounded-full">Current</span>}
+                            </div>
+                            <p className="text-emerald-600 font-600 mb-1">{exp.company}</p>
+                            <div className="flex justify-between items-start mb-3 text-sm text-gray-400">
+                                <span>{exp.location}</span>
+                                {exp.dates && <span className="text-right">{exp.dates}</span>}
+                            </div>
+                            <p className="text-gray-300">{exp.description}</p>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const RecentCard = ({ exp }) => (
+                <div className="glass rounded-lg p-6 hover-lift card-tilt" style={{ transition: 'transform 0.3s ease' }}>
                     <div className="flex items-start gap-4">
                         <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-2xl text-emerald-600">
                             <i className={exp.icon}></i>
@@ -669,7 +717,7 @@
                     {/* Recent Experience */}
                     <div className="space-y-6">
                         {recentExperiences.map((exp, idx) => (
-                            <ExperienceCard key={idx} exp={exp} delay={0.1 + idx * 0.1} />
+                            <RecentCard key={idx} exp={exp} />
                         ))}
                     </div>
 
@@ -687,13 +735,17 @@
                     </button>
 
                     {/* Previous Experience (Collapsible) */}
-                    {showPrevious && (
-                        <div className="space-y-6 fade-in">
-                            {previousExperiences.map((exp, idx) => (
-                                <ExperienceCard key={idx} exp={exp} delay={0.05 + idx * 0.05} />
-                            ))}
-                        </div>
-                    )}
+                    <div
+                        className="space-y-6 overflow-hidden transition-all duration-500 ease-in-out"
+                        style={{
+                            maxHeight: showPrevious ? '5000px' : '0',
+                            opacity: showPrevious ? '1' : '0'
+                        }}
+                    >
+                        {previousExperiences.map((exp, idx) => (
+                            <ExperienceCard key={idx} exp={exp} delay={0.05 + idx * 0.05} />
+                        ))}
+                    </div>
                 </div>
             );
         };
