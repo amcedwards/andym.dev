@@ -191,6 +191,24 @@ gh run watch --exit-status <run-id>
 1. Locate `const Experience = () => {`
 2. Add to `experiences` or `previousExperiences` array
 3. Follow existing structure with company, role, dates, description
+4. **Important:** Use consistent, theme-appropriate icons for each company
+
+### Company Icon Standards
+**Always use consistent icons for the same company across all roles:**
+
+Current company icon mappings:
+- **TD Bank Group:** `fas fa-landmark` (banking/financial institution)
+- **Intuit Inc.:** `fas fa-file-invoice-dollar` (taxes, accounting, finance)
+- **Sourced Group Inc.:** `fas fa-handshake` (consulting, partnership)
+- **D2L Inc.:** `fas fa-graduation-cap` (education, learning)
+- **VMware Inc.:** `fas fa-server` (virtualization, infrastructure)
+- **IBM Canada Ltd.:** `fab fa-ibm` (brand icon)
+
+**Guidelines for choosing icons:**
+- Choose icons that reflect the company's **core business theme**
+- Use **brand icons** (`fab`) when available (e.g., Microsoft, AWS, IBM)
+- For multiple roles at same company, **always use the same icon**
+- Prefer thematic relevance over generic icons (briefcase, building, etc.)
 
 ### Updating Contact Links
 1. Find the CTA buttons in the `Hero` component
