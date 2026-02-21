@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <style>
+    /* Default (Light Mode Tab) - Matches your site's dark theme */
+    .bg { fill: #1a221f; } 
+    .text { fill: #0fa471; } 
+    
+    /* Auto-adapts to Dark Mode browsers for visibility */
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #0fa471; } 
+      .text { fill: #1a221f; } 
+    }
+  </style>
+  
+  <rect width="100" height="100" rx="22" class="bg"/>
+  
+  <text x="50" y="55" font-family="system-ui, -apple-system, sans-serif" font-weight="600" font-size="38" text-anchor="middle" dominant-baseline="middle" class="text" letter-spacing="-1">AM</text>
+</svg>
