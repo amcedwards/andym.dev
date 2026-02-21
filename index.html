@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Andrew (Andy) McEdwards - Cloud & DevOps Engineering Leader">
+    <title>Andrew McEdwards - Cloud & DevOps Engineering</title>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts - Inter (modern sans-serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Animated gradient background */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animated-gradient {
+            background: linear-gradient(-45deg, #0F1419, #1A2A24, #2D3E3A, #1F3A35);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            33% { transform: translateY(-20px) translateX(10px); }
+            66% { transform: translateY(-10px) translateX(-10px); }
+        }
+
+        .float-slow {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .float-slower {
+            animation: float 8s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+
+        /* Pulse animation */
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .pulse-slow {
+            animation: pulse-slow 4s ease-in-out infinite;
+        }
+
+        /* Glass effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Smooth fade in */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .fade-in-delay-1 { animation-delay: 0.1s; }
+        .fade-in-delay-2 { animation-delay: 0.2s; }
+        .fade-in-delay-3 { animation-delay: 0.3s; }
+        .fade-in-delay-4 { animation-delay: 0.4s; }
+        .fade-in-delay-5 { animation-delay: 0.5s; }
+
+        /* Smooth transitions */
+        .transition-smooth {
+            transition: all 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Icon styling */
+        .icon-gradient {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-white overflow-x-hidden">
+    <div id="root"></div>
+
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Animated Background Component
+        const AnimatedBackground = () => (
+            <div className="fixed inset-0 overflow-hidden pointer-events-none">
+                {/* Main animated gradient */}
+                <div className="animated-gradient absolute inset-0"></div>
+
+                {/* Abstract shapes with opacity */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500 rounded-full blur-3xl opacity-10 float-slow"></div>
+                <div className="absolute bottom-0 left-0 w-80 h-80 bg-cyan-500 rounded-full blur-3xl opacity-10 float-slower"></div>
+                <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-indigo-500 rounded-full blur-3xl opacity-5 animate-pulse"></div>
+
+                {/* Grid pattern overlay */}
+                <div className="absolute inset-0 opacity-5" style={{
+                    backgroundImage: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+                }}>
+                </div>
+            </div>
+        );
+
+        // Hero Section
+        const Hero = () => (
+            <section className="relative min-h-screen flex items-center justify-center px-4 pt-20">
+                <div className="max-w-4xl w-full">
+                    {/* Avatar */}
+                    <div className="flex justify-center mb-8 fade-in">
+                        <div className="relative">
+                            <div className="w-24 h-24 bg-gradient-to-br from-emerald-600 to-teal-600 rounded-full flex items-center justify-center text-4xl shadow-2xl">
+                                👤
+                            </div>
+                            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-emerald-600 to-teal-600 opacity-25 blur-lg animate-pulse"></div>
+                        </div>
+                    </div>
+
+                    {/* Name and Title */}
+                    <div className="text-center mb-8 fade-in fade-in-delay-1">
+                        <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                            Andrew McEdwards
+                        </h1>
+                        <p className="text-2xl md:text-3xl text-gray-300 font-500">
+                            Right in the middle: people, process, and cloud technology
+                        </p>
+                        <p className="text-lg text-gray-400 mt-2">
+                            Toronto, Ontario, Canada
+                        </p>
+                    </div>
+
+                    {/* Quick Stats */}
+                    <div className="grid grid-cols-3 gap-4 mb-8 fade-in fade-in-delay-2">
+                        <div className="glass rounded-lg p-4 text-center hover-lift transition-smooth">
+                            <div className="text-2xl font-bold text-emerald-600">500+</div>
+                            <div className="text-sm text-gray-400">Connections</div>
+                        </div>
+                        <div className="glass rounded-lg p-4 text-center hover-lift transition-smooth">
+                            <div className="text-2xl font-bold text-emerald-600">1600+</div>
+                            <div className="text-sm text-gray-400">Followers</div>
+                        </div>
+                        <div className="glass rounded-lg p-4 text-center hover-lift transition-smooth">
+                            <div className="text-2xl font-bold text-emerald-600">25+</div>
+                            <div className="text-sm text-gray-400">Years Exp.</div>
+                        </div>
+                    </div>
+
+                    {/* CTA Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center fade-in fade-in-delay-3">
+                        <a href="#experience" className="px-8 py-3 rounded-lg font-600 text-white bg-emerald-700 hover:bg-emerald-600 transition-smooth text-center cursor-pointer flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+                            <i className="fas fa-arrow-down"></i>
+                            View Experience
+                        </a>
+                        <a href="https://github.com/amcedwards" target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-lg font-600 text-white bg-emerald-700 hover:bg-emerald-600 transition-smooth text-center cursor-pointer flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+                            <i className="fab fa-github"></i>
+                            GitHub
+                        </a>
+                        <a href="https://linkedin.com/in/andrewmcedwards" target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-lg font-600 text-white bg-emerald-700 hover:bg-emerald-600 transition-smooth text-center cursor-pointer flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+                            <i className="fab fa-linkedin"></i>
+                            LinkedIn
+                        </a>
+                    </div>
+
+                    {/* Scroll indicator */}
+                    <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 fade-in fade-in-delay-4">
+                        <div className="animate-bounce text-gray-400">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        // Icon components for certifications
+        const CertIcons = {
+            chart: () => (
+                <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+            ),
+            cloud: () => (
+                <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3v-7" />
+                </svg>
+            ),
+            building: () => (
+                <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+            ),
+            wrench: () => (
+                <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-2.291 4.205-.786a.5.5 0 00.707-.707C13.334 2.364 10.410 2.686 9.829 5.008a.5.5 0 00.956.29c.023-.09.077-.212.325.645A9.01 9.01 0 003 12c0-4.971 4.029-9 9-9 .788 0 1.56.068 2.314.195a.5.5 0 00.242-.969A8.956 8.956 0 0012 3c-4.418 0-8 3.582-8 8s3.582 8 8 8c.911 0 1.8-.083 2.666-.248a.5.5 0 00-.333-.942A7.975 7.975 0 0112 19c-3.866 0-7-3.134-7-7s3.134-7 7-7z" />
+                </svg>
+            ),
+        };
+
+        // Certifications Component
+        const Certifications = () => {
+            const certs = [
+                { title: 'FinOps Certified Practitioner', org: 'The Linux Foundation', date: 'Oct 2022', icon: 'fas fa-money-bill-trend-up' },
+                { title: 'Azure Administrator Associate (AZ-104)', org: 'Microsoft', date: 'Aug 2020 - Aug 2022', icon: 'fab fa-microsoft' },
+                { title: 'AWS Solutions Architect – Associate', org: 'Amazon Web Services', date: 'Nov 2013 - Sep 2020', icon: 'fab fa-aws' },
+                { title: 'Red Hat Certified Engineer (RHCE)', org: 'Red Hat', date: 'Jul 2002 - Jan 2005', icon: 'fab fa-redhat' },
+            ];
+
+            return (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {certs.map((cert, idx) => (
+                        <div key={idx} className="glass rounded-lg p-4 hover-lift transition-smooth fade-in" style={{ animationDelay: `${0.1 + idx * 0.1}s` }}>
+                            <div className="text-2xl mb-3 text-emerald-600">
+                                <i className={cert.icon}></i>
+                            </div>
+                            <h3 className="font-600 text-white mb-1">{cert.title}</h3>
+                            <p className="text-sm text-emerald-600 mb-1">{cert.org}</p>
+                            <p className="text-xs text-gray-500">{cert.date}</p>
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+
+        // Company Icon Component - Actual Logos
+        const CompanyIcon = ({ type }) => {
+            const iconMap = {
+                // TD Bank - Official green (#35B234) with connected TD
+                td: (
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-16 h-16">
+                        <rect width="64" height="64" fill="#35B234" rx="3"/>
+                        <g fill="white" fontFamily="Arial, sans-serif" fontWeight="bold" fontSize="24">
+                            <text x="16" y="42" fontWeight="900">TD</text>
+                        </g>
+                    </svg>
+                ),
+                // Sourced Group - Actual logo
+                sourced: (
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" className="w-16 h-16">
+                        <rect width="64" height="64" fill="white" rx="3"/>
+                        <image x="8" y="8" width="48" height="48" xlinkHref="data:image/png;base64,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" />
+                    </svg>
+                ),
+                // Intuit - Modern blue with "I"
+                intuit: (
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-16 h-16">
+                        <rect width="64" height="64" fill="#0066CC" rx="3"/>
+                        <g fill="white" fontFamily="Arial, sans-serif" fontWeight="900" fontSize="40">
+                            <text x="32" y="48" textAnchor="middle">I</text>
+                        </g>
+                    </svg>
+                ),
+                // D2L - Green with exponent design
+                d2l: (
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-16 h-16">
+                        <rect width="64" height="64" fill="#00A652" rx="3"/>
+                        <g fill="white" fontFamily="Arial, sans-serif" fontWeight="bold">
+                            <text x="20" y="42" fontSize="22">D</text>
+                            <text x="32" y="42" fontSize="22">2</text>
+                            <text x="43" y="42" fontSize="22">L</text>
+                            {/* Exponent dot */}
+                            <circle cx="47" cy="26" r="2.5" fill="white"/>
+                        </g>
+                    </svg>
+                ),
+                // VMware - Official gray-blue
+                vmware: (
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-16 h-16">
+                        <rect width="64" height="64" fill="#5D7B8C" rx="3"/>
+                        <g fill="white" fontFamily="Arial, sans-serif" fontWeight="bold" fontSize="18">
+                            <text x="17" y="42">VMware</text>
+                        </g>
+                    </svg>
+                ),
+                // RealTime Edge - Dark blue
+                realtime: (
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-16 h-16">
+                        <rect width="64" height="64" fill="#2C3E50" rx="3"/>
+                        <g fill="white" fontFamily="Arial, sans-serif" fontWeight="bold" fontSize="10">
+                            <text x="12" y="32">REALTIME</text>
+                            <text x="18" y="42">EDGE</text>
+                        </g>
+                    </svg>
+                ),
+                // MDS Proteomics - Slate blue
+                mds: (
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-16 h-16">
+                        <rect width="64" height="64" fill="#34495E" rx="3"/>
+                        <g fill="white" fontFamily="Arial, sans-serif" fontWeight="bold" fontSize="18">
+                            <text x="14" y="42">MDS</text>
+                        </g>
+                    </svg>
+                ),
+                // IBM - Official blue
+                ibm: (
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-16 h-16">
+                        <rect width="64" height="64" fill="#003399" rx="3"/>
+                        {/* IBM stripes design */}
+                        <g fill="white">
+                            <rect x="12" y="20" width="4" height="24" rx="1"/>
+                            <rect x="22" y="20" width="4" height="24" rx="1"/>
+                            <rect x="32" y="20" width="4" height="24" rx="1"/>
+                            <rect x="42" y="20" width="4" height="24" rx="1"/>
+                        </g>
+                    </svg>
+                ),
+            };
+            return iconMap[type] || null;
+        };
+
+        // Experience Component
+        const Experience = () => {
+            const [showPrevious, setShowPrevious] = useState(false);
+
+            const recentExperiences = [
+                {
+                    title: 'Senior Manager, Cloud Strategy',
+                    company: 'TD Bank Group',
+                    location: 'Toronto, ON',
+                    dates: 'Mar 2023 - Present',
+                    current: true,
+                    icon: 'fas fa-landmark',
+                    description: 'Steering TD\'s multi-cloud transformation across Azure, GCP, and SaaS—managing the complexity. Building governance frameworks and operating models so 10,000 engineers can actually deploy things.',
+                },
+                {
+                    title: 'Director of Consulting / Managing Principal Consultant',
+                    company: 'Sourced Group Inc.',
+                    location: 'Toronto, ON',
+                    dates: 'Feb 2021 - Mar 2023',
+                    icon: 'fas fa-briefcase',
+                    description: 'Owned the P&L while growing a consulting team 50% and coaching 25+ people to do great things for complex, highly regulated clients. Developed the strategy and bootstrapped multiple Canadian federal agencies.',
+                },
+                {
+                    title: 'Senior Consultant',
+                    company: 'Sourced Group Inc.',
+                    location: 'Toronto, ON',
+                    dates: 'May 2019 - Feb 2021',
+                    icon: 'fas fa-handshake',
+                    description: 'Turned cloud chaos into strategy for multiple banks, telco, healthcare and government organizations. Led advisory, assessment, roadmaps, and complex consulting engagements that helped make cloud\'s value a reality.',
+                },
+                {
+                    title: 'Lead Product Manager, Public Cloud Platform',
+                    company: 'Intuit Inc.',
+                    location: 'Mountain View / San Diego, CA',
+                    dates: 'Aug 2017 - May 2019',
+                    icon: 'fas fa-chart-line',
+                    description: 'Built Intuit\'s "all-in" AWS platform so 4000+ engineers could ship code faster. Created self-service goodies that designed for delight instead of making them drown in red tape.',
+                },
+                {
+                    title: 'Cloud Enablement Director',
+                    company: 'D2L Inc.',
+                    location: 'Toronto, ON',
+                    dates: 'Aug 2016 - Aug 2017',
+                    icon: 'fas fa-cloud',
+                    description: 'Enabled SaaS company\'s journey from oldschool on-prem to multi-tenant AWS. Balanced technology, culture, and people transformation to make it happen.',
+                },
+                {
+                    title: 'Public Cloud Consulting Manager / Cloud Operations Manager',
+                    company: 'Intuit Inc.',
+                    location: 'Toronto, ON',
+                    dates: 'Aug 2013 - Aug 2016',
+                    icon: 'fas fa-star',
+                    description: 'Founding cloud evangelist at Intuit when everyone still wondered what cloud was. Built and ran the cloud center of excellence, internal consulting, cloud operations, and FinOps practices that shipped results across the entire enterprise.',
+                },
+            ];
+
+            const previousExperiences = [
+                {
+                    title: 'Staff Systems Engineer',
+                    company: 'Intuit Inc.',
+                    location: 'Toronto, ON',
+                    dates: 'Nov 2009 - Aug 2013',
+                    icon: 'fas fa-cogs',
+                    description: 'Built the foundation that made big things possible. Enterprise systems at scale, before "scale" became a personality trait.',
+                },
+                {
+                    title: 'Lab Administrator',
+                    company: 'VMware Inc.',
+                    location: 'Canada',
+                    dates: 'Jul 2008 - Nov 2009',
+                    icon: 'fas fa-server',
+                    description: 'Virtualization before it was cool. Kept the lab humming while everyone figured out what virtual machines were for.',
+                },
+                {
+                    title: 'Infra/Ops Team Lead',
+                    company: 'RealTime Edge Software Corp.',
+                    location: 'Canada',
+                    dates: 'Jan 2006 - Jul 2007',
+                    icon: 'fas fa-people-group',
+                    description: 'Led a lean ops team through infrastructure adventures, back when "DevOps" wasn\'t a thing yet.',
+                },
+                {
+                    title: 'Senior Unix Administrator',
+                    company: 'MDS Proteomics Inc.',
+                    location: 'Canada',
+                    dates: 'Jan 2004 - Dec 2005',
+                    icon: 'fas fa-terminal',
+                    description: 'Deep Unix systems expertise. This is where I learned that having good ops fundamentals makes everything else easier.',
+                },
+                {
+                    title: 'IT Specialist',
+                    company: 'IBM Canada Ltd.',
+                    location: 'Canada',
+                    dates: 'Sep 2001 - Jul 2003',
+                    icon: 'fab fa-ibm',
+                    description: 'Started the journey at Big Blue. First real job, first big systems, first lessons in enterprise IT.',
+                },
+            ];
+
+            const ExperienceCard = ({ exp, delay }) => (
+                <div className="glass rounded-lg p-6 hover-lift transition-smooth fade-in" style={{ animationDelay: `${delay}s` }}>
+                    <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-2xl text-emerald-600">
+                            <i className={exp.icon}></i>
+                        </div>
+                        <div className="flex-1">
+                            <div className="flex items-baseline gap-2 mb-1">
+                                <h3 className="text-xl font-700 text-white">{exp.title}</h3>
+                                {exp.current && <span className="text-xs bg-emerald-700 text-white px-2 py-1 rounded-full">Current</span>}
+                            </div>
+                            <p className="text-emerald-600 font-600 mb-1">{exp.company}</p>
+                            <div className="flex justify-between items-start mb-3 text-sm text-gray-400">
+                                <span>{exp.location}</span>
+                                {exp.dates && <span className="text-right">{exp.dates}</span>}
+                            </div>
+                            <p className="text-gray-300">{exp.description}</p>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            return (
+                <div className="space-y-6">
+                    {/* Recent Experience */}
+                    <div className="space-y-6">
+                        {recentExperiences.map((exp, idx) => (
+                            <ExperienceCard key={idx} exp={exp} delay={0.1 + idx * 0.1} />
+                        ))}
+                    </div>
+
+                    {/* Previous Experience Toggle */}
+                    <button
+                        onClick={() => setShowPrevious(!showPrevious)}
+                        className="glass rounded-lg p-4 hover:bg-gray-500/10 transition-smooth w-full text-left flex items-center gap-3 text-emerald-600 font-600 cursor-pointer"
+                        aria-label={showPrevious ? 'Collapse previous experience' : 'Expand previous experience'}
+                        aria-expanded={showPrevious}
+                    >
+                        <svg className={`w-6 h-6 transition-transform ${showPrevious ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                        <span>Previous Experience</span>
+                    </button>
+
+                    {/* Previous Experience (Collapsible) */}
+                    {showPrevious && (
+                        <div className="space-y-6 fade-in">
+                            {previousExperiences.map((exp, idx) => (
+                                <ExperienceCard key={idx} exp={exp} delay={0.05 + idx * 0.05} />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        // Bento Grid Component - Key highlights
+        const BentoGrid = () => {
+            return (
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+                    {/* Large card: Strategy (PROMOTED) */}
+                    <div className="md:col-span-2 md:row-span-2 glass rounded-lg p-6 hover-lift transition-smooth fade-in bg-emerald-950/30 border border-emerald-600/30" style={{ animationDelay: '0.1s' }}>
+                        <div className="flex items-start justify-between h-full">
+                            <div>
+                                <div className="w-12 h-12 mb-4 text-emerald-600">
+                                    <i className="fas fa-chess text-2xl"></i>
+                                </div>
+                                <h3 className="text-2xl font-700 text-white mb-3">Strategy & Business Alignment</h3>
+                                <p className="text-gray-200 mb-2">Translating technology into business value</p>
+                                <p className="text-sm text-gray-400">Align infrastructure decisions with organizational goals. Drive adoption through clear value propositions and measurable outcomes.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Large card: Cloud Platforms */}
+                    <div className="md:col-span-2 md:row-span-2 glass rounded-lg p-6 hover-lift transition-smooth fade-in" style={{ animationDelay: '0.15s' }}>
+                        <div className="flex items-start justify-between h-full">
+                            <div>
+                                <div className="w-12 h-12 mb-4 text-emerald-600">
+                                    <i className="fas fa-cloud text-2xl"></i>
+                                </div>
+                                <h3 className="text-2xl font-700 text-white mb-3">Cloud Platforms</h3>
+                                <p className="text-gray-300 mb-4">Multi-cloud architecture expertise across AWS, Azure, and GCP</p>
+                                <div className="flex flex-wrap gap-2">
+                                    <span className="text-xs bg-emerald-600/20 text-emerald-300 px-3 py-1 rounded-full">AWS</span>
+                                    <span className="text-xs bg-emerald-600/20 text-emerald-300 px-3 py-1 rounded-full">Azure</span>
+                                    <span className="text-xs bg-emerald-600/20 text-emerald-300 px-3 py-1 rounded-full">GCP</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Medium card: Leadership */}
+                    <div className="md:col-span-2 glass rounded-lg p-6 hover-lift transition-smooth fade-in" style={{ animationDelay: '0.2s' }}>
+                        <div className="w-10 h-10 mb-3 text-emerald-600">
+                            <i className="fas fa-handshake text-xl"></i>
+                        </div>
+                        <h3 className="text-lg font-700 text-white mb-2">25+ Years Leadership</h3>
+                        <p className="text-sm text-gray-300">Servant leadership as manager and mentor</p>
+                    </div>
+
+                    {/* Medium card: Scale */}
+                    <div className="md:col-span-2 glass rounded-lg p-6 hover-lift transition-smooth fade-in" style={{ animationDelay: '0.25s' }}>
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <div className="w-10 h-10 mb-3 text-emerald-600">
+                                    <i className="fas fa-chart-line text-xl"></i>
+                                </div>
+                                <h3 className="text-lg font-700 text-white mb-2">Scale & Impact</h3>
+                                <p className="text-sm text-gray-300">Enabled 10,000+ engineers</p>
+                            </div>
+                            <div className="text-right">
+                                <div className="text-3xl font-bold text-emerald-600">10K+</div>
+                                <div className="text-xs text-gray-400">engineers</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Small card: FinOps */}
+                    <div className="md:col-span-1 glass rounded-lg p-4 hover-lift transition-smooth fade-in" style={{ animationDelay: '0.3s' }}>
+                        <div className="w-8 h-8 mb-2 text-emerald-600">
+                            <i className="fas fa-dollar-sign text-lg"></i>
+                        </div>
+                        <h3 className="text-sm font-700 text-white mb-1">FinOps</h3>
+                        <p className="text-xs text-gray-400">Cost optimization</p>
+                    </div>
+
+                    {/* Small card: CI/CD */}
+                    <div className="md:col-span-1 glass rounded-lg p-4 hover-lift transition-smooth fade-in" style={{ animationDelay: '0.35s' }}>
+                        <div className="w-8 h-8 mb-2 text-emerald-600">
+                            <i className="fas fa-cogs text-lg"></i>
+                        </div>
+                        <h3 className="text-sm font-700 text-white mb-1">DevOps</h3>
+                        <p className="text-xs text-gray-400">Infrastructure as Code</p>
+                    </div>
+
+                    {/* Small card: Observability */}
+                    <div className="md:col-span-1 glass rounded-lg p-4 hover-lift transition-smooth fade-in" style={{ animationDelay: '0.4s' }}>
+                        <div className="w-8 h-8 mb-2 text-emerald-600">
+                            <i className="fas fa-chart-bar text-lg"></i>
+                        </div>
+                        <h3 className="text-sm font-700 text-white mb-1">Observability</h3>
+                        <p className="text-xs text-gray-400">Monitoring & insights</p>
+                    </div>
+
+                    {/* Small card: Multi-Cloud */}
+                    <div className="md:col-span-1 glass rounded-lg p-4 hover-lift transition-smooth fade-in" style={{ animationDelay: '0.45s' }}>
+                        <div className="w-8 h-8 mb-2 text-emerald-600">
+                            <i className="fas fa-network-wired text-lg"></i>
+                        </div>
+                        <h3 className="text-sm font-700 text-white mb-1">Architecture</h3>
+                        <p className="text-xs text-gray-400">Distributed systems</p>
+                    </div>
+                </div>
+            );
+        };
+
+        // Icon components for skills
+        const SkillIcons = {
+            cloud: () => (
+                <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3v-7" />
+                </svg>
+            ),
+            wrench: () => (
+                <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-2.291 4.205-.786a.5.5 0 00.707-.707C13.334 2.364 10.410 2.686 9.829 5.008a.5.5 0 00.956.29c.023-.09.077-.212.325.645A9.01 9.01 0 003 12c0-4.971 4.029-9 9-9 .788 0 1.56.068 2.314.195a.5.5 0 00.242-.969A8.956 8.956 0 0012 3c-4.418 0-8 3.582-8 8s3.582 8 8 8c.911 0 1.8-.083 2.666-.248a.5.5 0 00-.333-.942A7.975 7.975 0 0112 19c-3.866 0-7-3.134-7-7s3.134-7 7-7z" />
+                </svg>
+            ),
+            dollar: () => (
+                <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            ),
+            people: () => (
+                <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 8.048M7 11H3v5a2 2 0 002 2h14a2 2 0 002-2v-5h-4m0 0h4a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2z" />
+                </svg>
+            ),
+        };
+
+        // Skills Component
+        const Skills = () => {
+            const skillGroups = [
+                {
+                    category: 'Cloud Platforms',
+                    icon: SkillIcons.cloud,
+                    skills: ['AWS', 'Azure', 'GCP', 'Multi-cloud Architecture'],
+                    gradient: 'from-emerald-600 to-teal-600'
+                },
+                {
+                    category: 'DevOps & Infrastructure',
+                    icon: SkillIcons.wrench,
+                    skills: ['Kubernetes', 'Docker', 'CI/CD', 'Infrastructure as Code'],
+                    gradient: 'from-emerald-500 to-teal-600'
+                },
+                {
+                    category: 'Financial Operations',
+                    icon: SkillIcons.dollar,
+                    skills: ['FinOps', 'Cost Optimization', 'Budget Management', 'Cloud Economics'],
+                    gradient: 'from-teal-600 to-emerald-600'
+                },
+                {
+                    category: 'Leadership & Management',
+                    icon: SkillIcons.people,
+                    skills: ['Team Leadership', 'Strategic Planning', 'Problem Solving', 'Customer First'],
+                    gradient: 'from-emerald-600 to-green-600'
+                },
+            ];
+
+            return (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {skillGroups.map((group, idx) => (
+                        <div key={idx} className="glass rounded-lg p-6 hover-lift transition-smooth fade-in" style={{ animationDelay: `${0.1 + idx * 0.15}s` }}>
+                            <div className="mb-3">{<group.icon />}</div>
+                            <h3 className={`text-lg font-700 mb-4 bg-gradient-to-r ${group.gradient} bg-clip-text text-transparent`}>
+                                {group.category}
+                            </h3>
+                            <div className="flex flex-wrap gap-2">
+                                {group.skills.map((skill, i) => (
+                                    <span key={i} className="bg-white/10 border border-white/20 text-gray-300 px-3 py-1 rounded-full text-sm hover:border-emerald-600 transition-smooth cursor-default">
+                                        {skill}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+
+// Main App Component
+        const App = () => {
+            const [activeSection, setActiveSection] = useState('hero');
+
+            return (
+                <div className="relative min-h-screen" style={{ backgroundColor: '#0F1419' }}>
+                    <AnimatedBackground />
+
+                    {/* Navigation */}
+                    <nav className="fixed top-0 w-full z-50 glass border-b backdrop-blur-md">
+                        <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+                            <div className="text-xl font-800 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                                AM
+                            </div>
+                            <div className="hidden md:flex gap-8">
+                                <a href="#experience" className="text-gray-300 hover:text-white transition-smooth text-sm font-500 cursor-pointer">Experience</a>
+                                <a href="#skills" className="text-gray-300 hover:text-white transition-smooth text-sm font-500 cursor-pointer">Skills</a>
+                                <a href="#certifications" className="text-gray-300 hover:text-white transition-smooth text-sm font-500 cursor-pointer">Certifications</a>
+                            </div>
+                            <div className="flex gap-6">
+                                <a href="https://github.com/amcedwards" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-smooth cursor-pointer" title="GitHub" aria-label="GitHub profile">
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    </svg>
+                                </a>
+                                <a href="https://linkedin.com/in/andrewmcedwards" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:text-emerald-600 transition-smooth cursor-pointer" title="LinkedIn" aria-label="LinkedIn profile">
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </nav>
+
+                    {/* Content */}
+                    <div className="relative z-10">
+                        {/* Hero */}
+                        <Hero />
+
+                        {/* Bento Grid Section - Key Highlights */}
+                        <section className="relative py-20 px-4">
+                            <div className="max-w-4xl mx-auto">
+                                <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center fade-in">
+                                    <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-green-700 bg-clip-text text-transparent">
+                                        Core Expertise
+                                    </span>
+                                </h2>
+                                <BentoGrid />
+                            </div>
+                        </section>
+
+                        {/* Experience Section */}
+                        <section id="experience" className="relative py-20 px-4">
+                            <div className="max-w-4xl mx-auto">
+                                <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center fade-in">
+                                    <span className="bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                                        Professional Experience
+                                    </span>
+                                </h2>
+                                <Experience />
+                            </div>
+                        </section>
+
+                        {/* Certifications Section */}
+                        <section id="certifications" className="relative py-20 px-4">
+                            <div className="max-w-4xl mx-auto">
+                                <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center fade-in">
+                                    <span className="bg-gradient-to-r from-teal-600 via-emerald-600 to-green-600 bg-clip-text text-transparent">
+                                        Certifications
+                                    </span>
+                                </h2>
+                                <Certifications />
+                            </div>
+                        </section>
+
+                        {/* Footer */}
+                        <footer className="relative py-12 px-4 border-t border-white/10">
+                            <div className="max-w-4xl mx-auto text-center text-gray-400">
+                                <div className="flex justify-center gap-6 mb-4">
+                                    <a href="https://github.com/amcedwards" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-smooth cursor-pointer" aria-label="GitHub profile">
+                                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                        </svg>
+                                        GitHub
+                                    </a>
+                                    <a href="https://linkedin.com/in/andrewmcedwards" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-emerald-600 transition-smooth cursor-pointer" aria-label="LinkedIn profile">
+                                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/>
+                                        </svg>
+                                        LinkedIn
+                                    </a>
+                                    <a href="mailto:andrew@example.com" className="hover:text-emerald-600 transition-smooth cursor-pointer">Email</a>
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            );
+        };
+
+        // Render App
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

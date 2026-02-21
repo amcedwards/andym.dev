@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- TD BANK LOGO -->
+  <g id="td-logo">
+    <rect x="4" y="4" width="56" height="56" fill="#35B234" rx="4"/>
+    <!-- Connected TD design -->
+    <g fill="white" font-family="Arial, sans-serif" font-weight="bold" font-size="32">
+      <path d="M 16 28 L 16 40 M 22 28 L 22 40 L 28 40 L 28 35 L 25 35" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M 32 28 C 32 28 40 28 40 34 C 40 40 32 40 32 40" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+</svg>
